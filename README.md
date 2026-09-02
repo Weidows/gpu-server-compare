@@ -2,7 +2,7 @@
 
 > 40+ 显卡 + 11 台服务器 — 价格 / 性能 / 能效 / 显存带宽 / 多卡扩展 / 发布时间 / 地区供货
 
-- **在线预览**: https://weidows.github.io/gpu-server-compare/
+- **在线预览**: https://blog.weidows.tech/gpu-server-compare/
 - **数据**: `data/gpus.json` / `data/servers.json` + `data/price_history.json`
 - **爬虫**: `scraper/fetch_gpus.py` (TechPowerUp) / `scraper/fetch_prices.py` (多源探针)
 

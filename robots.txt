@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://weidows.github.io/gpu-server-compare/sitemap.xml
+Sitemap: https://blog.weidows.tech/gpu-server-compare/sitemap.xml
