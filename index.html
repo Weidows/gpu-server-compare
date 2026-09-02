@@ -9,15 +9,15 @@
 <meta name="keywords" content="GPU对比,显卡天梯,RTX 5090,RTX 5070,RX 9070,服务器,GPU价格,AI显卡"/>
 <meta name="author" content="Weidows"/>
 <meta name="robots" content="index,follow"/>
-<link rel="canonical" href="https://blog.weidows.tech/gpu-server-compare/"/>
+<link rel="canonical" href="https://server-mark.weidows.tech/"/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="GPU & 服务器 全维度对比 — NVIDIA · AMD · Intel"/>
 <meta property="og:description" content="40+ 显卡与 11 台服务器全维度对比：价格/性能/能效/带宽/多卡/时间/地区，数据可追溯。"/>
-<meta property="og:url" content="https://blog.weidows.tech/gpu-server-compare/"/>
+<meta property="og:url" content="https://server-mark.weidows.tech/"/>
 <meta property="og:locale" content="zh_CN"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="GPU & 服务器 全维度对比"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"GPU & 服务器全维度对比","url":"https://blog.weidows.tech/gpu-server-compare/","description":"显卡与服务器多维对比工具","inLanguage":"zh-CN","applicationCategory":"UtilitiesApplication"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"GPU & 服务器全维度对比","url":"https://server-mark.weidows.tech/","description":"显卡与服务器多维对比工具","inLanguage":"zh-CN","applicationCategory":"UtilitiesApplication"}</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -333,7 +333,7 @@ footer{margin-top:18px;padding:14px;border:1px solid var(--border);border-radius
       <div class="chart-box"><h3>性价比排行 — 每 $1000 的 AI 性能（所选地区）</h3><canvas id="valueBar"></canvas></div>
     </div>
 
-    <div class="chart-box" style="height:320px;margin-top:10px"><h3>价格趋势（MSRP 基准 + 采集快照）— 切地区查看 · 悬停看数值 · 数据见下方更新时间</h3><canvas id="trendChart"></canvas></div>
+    <div class="chart-box" style="height:340px;margin-top:10px"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px"><h3 style="margin:0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">价格趋势（MSRP 基准 + 采集快照）— 地区联动</h3><div id="trendRange" style="display:flex;gap:4px;margin-left:auto"><button data-r="1m" class="chip">1月</button><button data-r="3m" class="chip">3月</button><button data-r="6m" class="chip on">6月</button><button data-r="1y" class="chip">1年</button></div></div><canvas id="trendChart"></canvas></div>
     <div class="section-title" style="margin-top:14px"><h2>显卡清单</h2><div class="line"></div><span class="badge" id="countBadge"></span><span class="badge">点击表头排序 · 勾选加入对比 · 点击行查看详情</span></div>
 
     <div class="table-wrap" id="tableWrap">
@@ -521,7 +521,14 @@ function bindEvents(){
   document.getElementById('segmentSel').addEventListener('change', e=>{state.segment=e.target.value;render()});
   document.getElementById('archSel').addEventListener('change', e=>{state.arch=e.target.value;render()});
   document.getElementById('sortSel').addEventListener('change', e=>{state.sort=e.target.value;render()});
-  document.getElementById('regionSel').addEventListener('change', e=>{state.region=e.target.value;render();renderLab();renderMatrix();});
+  document.getElementById('regionSel').addEventListener('change', e=>{state.region=e.target.value;render();renderLab();renderMatrix();renderTrend(filtered());});
+  // 趋势时间范围
+  document.getElementById('trendRange')?.addEventListener('click', e=>{
+    const b=e.target.closest('button[data-r]'); if(!b) return;
+    trendRange=b.dataset.r;
+    document.querySelectorAll('#trendRange button').forEach(x=>x.classList.toggle('on', x===b));
+    renderTrend(filtered());
+  });
   document.getElementById('viewToggle').addEventListener('click', e=>{
     const b=e.target.closest('button');if(!b) return;
     state.view=b.dataset.view;
@@ -820,38 +827,42 @@ function upsertChart(id, cfg){
 // ---------- price trend ----------
 function renderTrend(list){
   const canvas=document.getElementById('trendChart'); if(!canvas) return;
-  // 选 6 款代表作（覆盖高中低 + 数据中心 1 款），确保趋势可读
   const picks=['rtx5090','rtx5080','rtx5070','rtx5060','9070xt','rx9060xt_16'];
   const chosen=picks.map(id=>list.find(g=>g.id===id) || gpus.find(g=>g.id===id)).filter(Boolean).slice(0,6);
   if(chosen.length===0) return;
-  // 时间轴：近 6 个月，或 priceHistory 中的真实点
+  const cfg={ '1m':{months:1,points:8}, '3m':{months:3,points:6}, '6m':{months:6,points:6}, '1y':{months:12,points:12} }[trendRange] || {months:6,points:6};
   let labels=[], seriesMap=new Map();
   if(priceHistory && Array.isArray(priceHistory.prices) && priceHistory.prices.length>0){
-    // 期望 priceHistory.prices: [{date, id, price_usd}, ...]
     const byId=new Map();
     priceHistory.prices.forEach(p=>{ if(!byId.has(p.id)) byId.set(p.id,[]); byId.get(p.id).push(p); });
-    const allDates=[...new Set(priceHistory.prices.map(p=>p.date))].sort();
-    labels=allDates;
+    // 按 range 过滤
+    const cutoff=new Date(); cutoff.setMonth(cutoff.getMonth()-cfg.months);
+    const allDates=[...new Set(priceHistory.prices.map(p=>p.date))].sort().filter(d=> new Date(d) >= cutoff);
+    // 若过滤后为空，退回全量
+    labels=allDates.length? allDates : [...new Set(priceHistory.prices.map(p=>p.date))].sort().slice(-cfg.points);
     chosen.forEach(g=>{
       const pts=byId.get(g.id) || [];
       const m=new Map(pts.map(p=>[p.date,p.price_usd ?? p.price]));
       seriesMap.set(g.id, labels.map(d=> m.get(d) ?? null));
     });
   } else {
-    // 合成演示：MSRP 为基准，6 个月随机波动 ±6%，让图有趋势感（明确标注为演示）
+    // 合成演示：按 range 生成时间轴
     const months=[];
     const now=new Date();
-    for(let i=5;i>=0;i--){ const d=new Date(now); d.setMonth(now.getMonth()-i); months.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`); }
+    if(trendRange==='1m'){
+      for(let i=cfg.points-1;i>=0;i--){ const d=new Date(now); d.setDate(now.getDate()-i*4); months.push(`${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`); }
+    } else {
+      for(let i=cfg.points-1;i>=0;i--){ const d=new Date(now); d.setMonth(now.getMonth()-Math.round(i*cfg.months/cfg.points)); months.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`); }
+    }
     labels=months;
     chosen.forEach(g=>{
       const base=priceFor(g);
-      // seeded pseudo-random per gpu
       let h=0; for(const c of g.id) h=(h*31+c.charCodeAt(0))>>>0;
       const rnd=(i)=>{ h=(h*1664525+1013904223)>>>0; return (h%1000)/1000; };
       const arr=labels.map((_,i)=>{
         if(i===labels.length-1) return base;
-        const drift=(rnd(i)-0.5)*0.12; // ±6%
-        const trend=(i/(labels.length-1)-0.5)*0.04; // 轻微上行
+        const drift=(rnd(i)-0.5)*0.12;
+        const trend=(i/(labels.length-1)-0.5)*0.04;
         return Math.round(base*(1+drift+trend));
       });
       seriesMap.set(g.id, arr);
@@ -873,19 +884,19 @@ function renderTrend(list){
         legend:{labels:{color:'#e6edf8', boxWidth:12, font:{size:11, weight:600}, padding:14}},
         tooltip:{backgroundColor:'rgba(14,26,48,.92)', titleColor:'#e6edf8', bodyColor:'#e6edf8', borderColor:'rgba(255,255,255,.12)', borderWidth:1,
           callbacks:{label:ctx=>`${ctx.dataset.label}: ${REGION_CUR[state.region]}${ctx.raw==null?'—':ctx.raw.toLocaleString()}`}},
-        title:{display:isDemo, text:'演示数据（MSRP ±6% 波动）— 接入真实采集后自动切换', color:'#8a9bb8', font:{size:10}}
+        title:{display:isDemo, text:'演示数据（MSRP ±6% 波动）— 接入真实采集后自动切换 · '+trendRange, color:'#8a9bb8', font:{size:10}}
       },
       scales:{
-        x:{ticks:{color:'#8a9bb8', font:{size:10}}, grid:{color:'rgba(255,255,255,.06)'}},
+        x:{ticks:{color:'#8a9bb8', font:{size:10}, maxRotation:0}, grid:{color:'rgba(255,255,255,.06)'}},
         y:{ticks:{color:'#8a9bb8', callback:v=>REGION_CUR[state.region]+v}, grid:{color:'rgba(255,255,255,.06)'}}
       }
     }
   });
-  // 地区切换时重绘
   canvas._trendList=list;
 }
 
 // ---------- compare ----------
+
 
 function toggleCompare(id){
   const idx=state.compare.indexOf(id);
