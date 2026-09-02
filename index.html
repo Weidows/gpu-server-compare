@@ -18,6 +18,9 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="GPU & 服务器 全维度对比"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"GPU & 服务器全维度对比","url":"https://server-mark.weidows.tech/","description":"显卡与服务器多维对比工具","inLanguage":"zh-CN","applicationCategory":"UtilitiesApplication"}</script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-smiley-sans@1.0.0/style.min.css" media="print" onload="this.media='all'"/>
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-smiley-sans@1.0.0/style.min.css"/></noscript>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -30,9 +33,12 @@
   --radius:14px;--radius-sm:9px;
   --shadow:0 8px 32px rgba(0,0,0,.45);
 }
+/* smiley-sans: headings get oblique charm, body stays legible */
+.brand h1, .section-title h2, .chart-box h3{font-family:"smiley-sans","Smiley Sans","得意黑",ui-sans-system,sans-serif; letter-spacing:.02em}
+
 html,body{height:100%}
 body{
-  font-family:ui-sans-system,-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  font-family:"smiley-sans","Smiley Sans","得意黑",ui-sans-system,-apple-system,"Segoe UI",Roboto,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;
   background:
     radial-gradient(900px 500px at 15% -10%, rgba(79,156,255,.18), transparent 60%),
     radial-gradient(700px 400px at 95% 10%, rgba(124,240,214,.12), transparent 60%),
@@ -453,6 +459,7 @@ let charts={};
 
 // ---------- load ----------
 let priceHistory=null;
+if(window.Chart) Chart.defaults.font.family = '"smiley-sans","Smiley Sans","得意黑",system-ui,sans-serif';
 async function load(){
   const [gj,sj,ph]=await Promise.all([
     fetch('data/gpus.json').then(r=>r.json()),
