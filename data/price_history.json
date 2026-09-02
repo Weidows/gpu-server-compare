@@ -1,0 +1,32 @@
+{
+  "fetched_at": "2026-09-02T06:58:53.008663+00:00",
+  "sources": {
+    "newegg_us_probe": {
+      "ok": true,
+      "samples": [
+        3991.83,
+        4499.99,
+        4899.99,
+        4929.99,
+        4929.99,
+        4999.99
+      ],
+      "count": 6,
+      "note": "HTML price regex, may include accessories; use as signal only"
+    },
+    "jd_p3_demo": {
+      "ok": false,
+      "error": "__ERROR__ <urlopen error _ssl.c:999: The handshake operation timed out>"
+    },
+    "jd_search": {
+      "ok": true,
+      "len": 47723,
+      "has_item": true
+    },
+    "geizhals": {
+      "ok": false,
+      "reason": "no APIFY_TOKEN (free tier  $1/1k, 京东/亚马逊无需)"
+    }
+  },
+  "prices": []
+}
