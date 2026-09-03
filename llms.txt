@@ -1,0 +1,18 @@
+# GPU & Server Compare — machine-readable
+
+Site: https://server-mark.weidows.tech/
+Repo: https://github.com/Weidows/gpu-server-compare
+
+## Endpoints (JSON, CORS *, no auth)
+- /data/gpus.json — 40+ GPUs, full specs (price/ vram/ bandwidth/ tdp/ tflops/ perf_* / region_price+avail)
+- /data/servers.json — 11 servers (gpu_id, gpu_count, cpu/ram/storage/power/price)
+- /data/timeline.json — same GPUs sorted by release (id/brand/name/arch/segment/release/msrp/vram)
+- /data/price_history.json — snapshots {fetched_at, prices:[{date,id,price}]}
+- /data/meta.json — updated_at, counts, endpoint index
+- /api/openapi.json — OpenAPI 3.1 stub
+
+## Usage
+curl https://server-mark.weidows.tech/data/gpus.json | jq '.[0]'
+curl https://server-mark.weidows.tech/data/timeline.json | jq 'sort_by(.release)'
+# Filter: ? not needed — all static. Do client-side filtering.
+# Timeline page: /#timeline (hash router) or tab 时间线·地区

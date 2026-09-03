@@ -1,0 +1,19 @@
+{
+  "site": "https://server-mark.weidows.tech/",
+  "repo": "https://github.com/Weidows/gpu-server-compare",
+  "updated_at": "2026-09-03T07:14:17.550838Z",
+  "data_coverage_until": "2025-07-01",
+  "counts": {
+    "gpus": 40,
+    "servers": 11
+  },
+  "endpoints": {
+    "gpus": "/data/gpus.json",
+    "servers": "/data/servers.json",
+    "timeline": "/data/timeline.json",
+    "price_history": "/data/price_history.json",
+    "meta": "/data/meta.json",
+    "openapi": "/api/openapi.json"
+  },
+  "notes": "All prices are snapshots (MSRP + regional sampling). CN restricted models flagged via region_avail. Static site, CORS *, no auth."
+}

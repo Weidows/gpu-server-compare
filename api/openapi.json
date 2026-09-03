@@ -1,0 +1,65 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "GPU & Server Compare API",
+    "version": "1.0.0",
+    "description": "Static JSON API for GPU/server comparison. All files are static, CORS *, no auth. Base: https://server-mark.weidows.tech"
+  },
+  "servers": [
+    {
+      "url": "https://server-mark.weidows.tech"
+    }
+  ],
+  "paths": {
+    "/data/gpus.json": {
+      "get": {
+        "summary": "All GPUs (40+), full specs",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/data/servers.json": {
+      "get": {
+        "summary": "Servers /整机",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/data/timeline.json": {
+      "get": {
+        "summary": "Timeline sorted by release",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/data/price_history.json": {
+      "get": {
+        "summary": "Price snapshots",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/data/meta.json": {
+      "get": {
+        "summary": "Site meta & endpoint index",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}

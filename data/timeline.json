@@ -1,0 +1,402 @@
+[
+  {
+    "id": "a100_80",
+    "brand": "NVIDIA",
+    "name": "A100 80GB SXM4",
+    "arch": "Ampere",
+    "segment": "datacenter",
+    "release": "2020-11-16",
+    "msrp_usd": 15000,
+    "vram_gb": 80
+  },
+  {
+    "id": "h100_sxm",
+    "brand": "NVIDIA",
+    "name": "H100 SXM5 80GB",
+    "arch": "Hopper",
+    "segment": "datacenter",
+    "release": "2022-09-20",
+    "msrp_usd": 30000,
+    "vram_gb": 80
+  },
+  {
+    "id": "rtx4090",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 4090",
+    "arch": "Ada Lovelace",
+    "segment": "consumer",
+    "release": "2022-10-12",
+    "msrp_usd": 1599,
+    "vram_gb": 24
+  },
+  {
+    "id": "a770",
+    "brand": "Intel",
+    "name": "Arc A770 16GB",
+    "arch": "Alchemist",
+    "segment": "consumer",
+    "release": "2022-10-12",
+    "msrp_usd": 349,
+    "vram_gb": 16
+  },
+  {
+    "id": "rtx6000ada",
+    "brand": "NVIDIA",
+    "name": "RTX 6000 Ada 48GB",
+    "arch": "Ada Lovelace",
+    "segment": "workstation",
+    "release": "2022-12-02",
+    "msrp_usd": 6799,
+    "vram_gb": 48
+  },
+  {
+    "id": "7900xtx",
+    "brand": "AMD",
+    "name": "Radeon RX 7900 XTX",
+    "arch": "RDNA 3",
+    "segment": "consumer",
+    "release": "2022-12-13",
+    "msrp_usd": 999,
+    "vram_gb": 24
+  },
+  {
+    "id": "7900xt",
+    "brand": "AMD",
+    "name": "Radeon RX 7900 XT",
+    "arch": "RDNA 3",
+    "segment": "consumer",
+    "release": "2022-12-13",
+    "msrp_usd": 899,
+    "vram_gb": 20
+  },
+  {
+    "id": "intel_max1550",
+    "brand": "Intel",
+    "name": "Data Center GPU Max 1550",
+    "arch": "Ponte Vecchio",
+    "segment": "datacenter",
+    "release": "2023-01-10",
+    "msrp_usd": 8000,
+    "vram_gb": 128
+  },
+  {
+    "id": "l4",
+    "brand": "NVIDIA",
+    "name": "L4 24GB",
+    "arch": "Ada Lovelace",
+    "segment": "datacenter",
+    "release": "2023-03-21",
+    "msrp_usd": 2500,
+    "vram_gb": 24
+  },
+  {
+    "id": "w7900",
+    "brand": "AMD",
+    "name": "Radeon Pro W7900 48GB",
+    "arch": "RDNA 3",
+    "segment": "workstation",
+    "release": "2023-06-13",
+    "msrp_usd": 3499,
+    "vram_gb": 48
+  },
+  {
+    "id": "rtx4060",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 4060",
+    "arch": "Ada Lovelace",
+    "segment": "consumer",
+    "release": "2023-06-29",
+    "msrp_usd": 299,
+    "vram_gb": 8
+  },
+  {
+    "id": "rtx4060ti_16",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 4060 Ti 16GB",
+    "arch": "Ada Lovelace",
+    "segment": "consumer",
+    "release": "2023-07-18",
+    "msrp_usd": 499,
+    "vram_gb": 16
+  },
+  {
+    "id": "gh200",
+    "brand": "NVIDIA",
+    "name": "GH200 Grace Hopper 96GB",
+    "arch": "Hopper + Grace",
+    "segment": "datacenter",
+    "release": "2023-08-08",
+    "msrp_usd": 40000,
+    "vram_gb": 96
+  },
+  {
+    "id": "l40s",
+    "brand": "NVIDIA",
+    "name": "L40S 48GB",
+    "arch": "Ada Lovelace",
+    "segment": "datacenter",
+    "release": "2023-08-24",
+    "msrp_usd": 9000,
+    "vram_gb": 48
+  },
+  {
+    "id": "7800xt",
+    "brand": "AMD",
+    "name": "Radeon RX 7800 XT",
+    "arch": "RDNA 3",
+    "segment": "consumer",
+    "release": "2023-09-06",
+    "msrp_usd": 499,
+    "vram_gb": 16
+  },
+  {
+    "id": "7700xt",
+    "brand": "AMD",
+    "name": "Radeon RX 7700 XT",
+    "arch": "RDNA 3",
+    "segment": "consumer",
+    "release": "2023-09-06",
+    "msrp_usd": 449,
+    "vram_gb": 12
+  },
+  {
+    "id": "mi300x",
+    "brand": "AMD",
+    "name": "Instinct MI300X 192GB",
+    "arch": "CDNA 3",
+    "segment": "datacenter",
+    "release": "2023-12-06",
+    "msrp_usd": 15000,
+    "vram_gb": 192
+  },
+  {
+    "id": "rtx4070s",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 4070 Super",
+    "arch": "Ada Lovelace",
+    "segment": "consumer",
+    "release": "2024-01-17",
+    "msrp_usd": 599,
+    "vram_gb": 12
+  },
+  {
+    "id": "7600xt",
+    "brand": "AMD",
+    "name": "Radeon RX 7600 XT",
+    "arch": "RDNA 3",
+    "segment": "consumer",
+    "release": "2024-01-24",
+    "msrp_usd": 329,
+    "vram_gb": 16
+  },
+  {
+    "id": "rtx4080s",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 4080 Super",
+    "arch": "Ada Lovelace",
+    "segment": "consumer",
+    "release": "2024-01-31",
+    "msrp_usd": 999,
+    "vram_gb": 16
+  },
+  {
+    "id": "7900gre",
+    "brand": "AMD",
+    "name": "Radeon RX 7900 GRE",
+    "arch": "RDNA 3",
+    "segment": "consumer",
+    "release": "2024-02-27",
+    "msrp_usd": 549,
+    "vram_gb": 16
+  },
+  {
+    "id": "h200_sxm",
+    "brand": "NVIDIA",
+    "name": "H200 SXM 141GB",
+    "arch": "Hopper",
+    "segment": "datacenter",
+    "release": "2024-04-15",
+    "msrp_usd": 35000,
+    "vram_gb": 141
+  },
+  {
+    "id": "mi325x",
+    "brand": "AMD",
+    "name": "Instinct MI325X 256GB",
+    "arch": "CDNA 3",
+    "segment": "datacenter",
+    "release": "2024-10-10",
+    "msrp_usd": 18000,
+    "vram_gb": 256
+  },
+  {
+    "id": "b200_sxm",
+    "brand": "NVIDIA",
+    "name": "B200 SXM 192GB",
+    "arch": "Blackwell",
+    "segment": "datacenter",
+    "release": "2024-10-15",
+    "msrp_usd": 45000,
+    "vram_gb": 192
+  },
+  {
+    "id": "b580",
+    "brand": "Intel",
+    "name": "Arc B580",
+    "arch": "Battlemage",
+    "segment": "consumer",
+    "release": "2024-12-13",
+    "msrp_usd": 249,
+    "vram_gb": 12
+  },
+  {
+    "id": "b570",
+    "brand": "Intel",
+    "name": "Arc B570",
+    "arch": "Battlemage",
+    "segment": "consumer",
+    "release": "2025-01-16",
+    "msrp_usd": 219,
+    "vram_gb": 10
+  },
+  {
+    "id": "rtx5090",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 5090",
+    "arch": "Blackwell",
+    "segment": "consumer",
+    "release": "2025-01-30",
+    "msrp_usd": 1999,
+    "vram_gb": 32
+  },
+  {
+    "id": "rtx5080",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 5080",
+    "arch": "Blackwell",
+    "segment": "consumer",
+    "release": "2025-01-30",
+    "msrp_usd": 999,
+    "vram_gb": 16
+  },
+  {
+    "id": "rtx5070ti",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 5070 Ti",
+    "arch": "Blackwell",
+    "segment": "consumer",
+    "release": "2025-02-20",
+    "msrp_usd": 749,
+    "vram_gb": 16
+  },
+  {
+    "id": "rtx5070",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 5070",
+    "arch": "Blackwell",
+    "segment": "consumer",
+    "release": "2025-03-05",
+    "msrp_usd": 549,
+    "vram_gb": 12
+  },
+  {
+    "id": "9070xt",
+    "brand": "AMD",
+    "name": "Radeon RX 9070 XT",
+    "arch": "RDNA 4",
+    "segment": "consumer",
+    "release": "2025-03-06",
+    "msrp_usd": 599,
+    "vram_gb": 16
+  },
+  {
+    "id": "9070",
+    "brand": "AMD",
+    "name": "Radeon RX 9070",
+    "arch": "RDNA 4",
+    "segment": "consumer",
+    "release": "2025-03-06",
+    "msrp_usd": 549,
+    "vram_gb": 16
+  },
+  {
+    "id": "rtx_pro6000_bw",
+    "brand": "NVIDIA",
+    "name": "RTX PRO 6000 Blackwell 96GB",
+    "arch": "Blackwell",
+    "segment": "workstation",
+    "release": "2025-03-18",
+    "msrp_usd": 8435,
+    "vram_gb": 96
+  },
+  {
+    "id": "gb200",
+    "brand": "NVIDIA",
+    "name": "GB200 Grace Blackwell 192GB",
+    "arch": "Blackwell + Grace",
+    "segment": "datacenter",
+    "release": "2025-03-18",
+    "msrp_usd": 70000,
+    "vram_gb": 192
+  },
+  {
+    "id": "rtx5060ti_16",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 5060 Ti 16GB",
+    "arch": "Blackwell",
+    "segment": "consumer",
+    "release": "2025-04-16",
+    "msrp_usd": 429,
+    "vram_gb": 16
+  },
+  {
+    "id": "rtx5060ti_8",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 5060 Ti 8GB",
+    "arch": "Blackwell",
+    "segment": "consumer",
+    "release": "2025-04-16",
+    "msrp_usd": 379,
+    "vram_gb": 8
+  },
+  {
+    "id": "rtx5060",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 5060",
+    "arch": "Blackwell",
+    "segment": "consumer",
+    "release": "2025-05-19",
+    "msrp_usd": 299,
+    "vram_gb": 8
+  },
+  {
+    "id": "rx9060xt_16",
+    "brand": "AMD",
+    "name": "Radeon RX 9060 XT 16GB",
+    "arch": "RDNA 4",
+    "segment": "consumer",
+    "release": "2025-06-05",
+    "msrp_usd": 349,
+    "vram_gb": 16
+  },
+  {
+    "id": "rx9060xt_8",
+    "brand": "AMD",
+    "name": "Radeon RX 9060 XT 8GB",
+    "arch": "RDNA 4",
+    "segment": "consumer",
+    "release": "2025-06-05",
+    "msrp_usd": 279,
+    "vram_gb": 8
+  },
+  {
+    "id": "rtx5050",
+    "brand": "NVIDIA",
+    "name": "GeForce RTX 5050",
+    "arch": "Blackwell",
+    "segment": "consumer",
+    "release": "2025-07-01",
+    "msrp_usd": 249,
+    "vram_gb": 8
+  }
+]

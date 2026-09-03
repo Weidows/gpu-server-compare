@@ -245,6 +245,28 @@ tbody tr.sel{background:rgba(79,156,255,.12)}
 .tl-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;border:2px solid var(--bg);cursor:pointer}
 .tl-dot:hover{transform:translate(-50%,-50%) scale(1.4)}
 .tl-label{position:absolute;top:-18px;transform:translateX(-50%);font-size:9px;white-space:nowrap;color:var(--muted);pointer-events:none}
+/* vertical timeline (agent-friendly + human) */
+.vt-wrap{position:relative;padding:12px 0 12px 28px}
+.vt-wrap::before{content:"";position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg, rgba(79,156,255,.35), rgba(124,240,214,.18), transparent);border-radius:999px}
+.vt-year{position:sticky;top:62px;z-index:1;display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--muted);background:rgba(17,26,46,.92);border:1px solid var(--border);padding:4px 10px;border-radius:999px;margin:14px 0 8px -4px;backdrop-filter:blur(8px)}
+.vt-year:first-child{margin-top:0}
+.vt-card{position:relative;background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin:8px 0;display:flex;gap:10px;align-items:center;cursor:pointer;transition:.15s}
+.vt-card:hover{border-color:rgba(79,156,255,.28);transform:translateX(2px)}
+.vt-card::before{content:"";position:absolute;left:-21px;top:50%;transform:translateY(-50%);width:10px;height:10px;border-radius:50%;border:2px solid var(--bg);box-shadow:0 0 0 2px rgba(79,156,255,.18)}
+.vt-card.vt-nvidia::before{background:#76b900}
+.vt-card.vt-amd::before{background:#ed1c24}
+.vt-card.vt-intel::before{background:#0071c5}
+.vt-card h4{font-size:13px;line-height:1.2}
+.vt-card h4 small{font-weight:400;color:var(--muted);font-size:11px}
+.vt-meta{margin-left:auto;text-align:right;font-size:11px;color:var(--muted);white-space:nowrap}
+.vt-meta strong{color:var(--text);font-size:12px}
+.vt-ctrl{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.vt-ctrl .chip{font-size:11px;padding:5px 10px}
+.api-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:12px;margin-top:12px}
+.api-box h4{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.api-box code{font-family:ui-monospace,monospace;font-size:11px;color:#cbd5e1}
+.api-box pre{margin:6px 0 0;background:rgba(0,0,0,.28);border:1px solid var(--border);border-radius:8px;padding:8px 10px;overflow:auto}
+
 /* region matrix */
 .matrix-wrap{overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
 .matrix{border-collapse:collapse;width:100%;min-width:760px;font-size:12px}
@@ -409,8 +431,38 @@ footer{margin-top:18px;padding:14px;border:1px solid var(--border);border-radius
 
   <!-- TIMELINE / REGION -->
   <div id="view-timeline" style="display:none">
-    <div class="section-title"><h2>发布时间轴</h2><div class="line"></div><span class="badge">2020 — 2025</span></div>
-    <div class="timeline" id="timeline"></div>
+    <div class="section-title"><h2>发布时间轴</h2><div class="line"></div><span class="badge" id="tlBadge">—</span><span class="badge">点击卡片看详情 · 支持按品牌/定位筛选</span></div>
+    <div class="vt-ctrl" id="tlCtrl">
+      <span style="font-size:11px;color:var(--muted)">品牌</span>
+      <button class="chip on" data-vt="all">全部</button>
+      <button class="chip" data-vt="NVIDIA">NVIDIA</button>
+      <button class="chip" data-vt="AMD">AMD</button>
+      <button class="chip" data-vt="Intel">Intel</button>
+      <span style="width:10px"></span>
+      <span style="font-size:11px;color:var(--muted)">定位</span>
+      <button class="chip on" data-vtseg="all">全部</button>
+      <button class="chip" data-vtseg="consumer">消费级</button>
+      <button class="chip" data-vtseg="datacenter">数据中心</button>
+      <button class="chip" data-vtseg="workstation">工作站</button>
+      <span style="margin-left:auto;display:flex;gap:6px;align-items:center">
+        <button class="btn btn-ghost" style="padding:6px 10px;font-size:11px" onclick="navigator.clipboard.writeText(location.origin+location.pathname+'#timeline');alert('已复制时间轴链接 #timeline')">复制链接</button>
+        <a class="btn btn-ghost" style="padding:6px 10px;font-size:11px" href="data/timeline.json" target="_blank">timeline.json</a>
+      </span>
+    </div>
+    <div class="timeline" id="timeline" style="display:none"></div>
+    <div id="vtimeline" class="vt-wrap"></div>
+    <div class="api-box">
+      <h4>🤖 Agent 抓取（静态 JSON · CORS * · 无需鉴权）</h4>
+      <div style="font-size:11px;color:var(--muted);line-height:1.6">所有数据均为静态文件，适合脚本/智能体直接拉取。建议按时间轴增量抓取 <code>timeline.json</code>。</div>
+      <pre><code>curl https://server-mark.weidows.tech/data/meta.json | jq
+curl https://server-mark.weidows.tech/data/timeline.json | jq 'sort_by(.release)'
+curl "https://server-mark.weidows.tech/data/gpus.json" | jq '[.[]|{id,name,release,msrp_usd,vram_gb}]'
+# LLM 友好索引
+curl https://server-mark.weidows.tech/llms.txt
+# OpenAPI
+curl https://server-mark.weidows.tech/api/openapi.json | jq .info</code></pre>
+      <div style="font-size:11px;color:var(--dim);margin-top:6px">端点：<code>/data/gpus.json</code> · <code>/data/servers.json</code> · <code>/data/timeline.json</code> · <code>/data/price_history.json</code> · <code>/data/meta.json</code> · <code>/api/openapi.json</code> · <code>/llms.txt</code></div>
+    </div>
 
     <div class="section-title" style="margin-top:14px"><h2>地区价格与供货矩阵</h2><div class="line"></div><span class="badge">所选地区高亮 · 点击列头排序</span></div>
     <div class="matrix-wrap"><table class="matrix" id="matrix"></table></div>
@@ -521,6 +573,12 @@ function init(){
   renderTimeline();
   renderMatrix();
   renderLab();
+  // hash 路由: #timeline / #compare 等
+  const hash=(location.hash||'').replace('#',''); if(hash && ['overview','compare','multi','servers','timeline'].includes(hash)){ document.querySelector(`[data-tab="${hash}"]`)?.click(); }
+  window.addEventListener('hashchange', ()=>{ const h=(location.hash||'').replace('#',''); const btn=document.querySelector(`[data-tab="${h}"]`); if(btn) btn.click(); });
+  // 更新 hash 当切换 tab
+  const _origTabClick = document.getElementById('tabs').onclick;
+  document.getElementById('tabs').addEventListener('click', e=>{ const t=e.target.closest('.tab'); if(t) history.replaceState(null,'','#'+t.dataset.tab); });
 }
 
 function bindEvents(){
@@ -529,6 +587,19 @@ function bindEvents(){
   document.getElementById('archSel').addEventListener('change', e=>{state.arch=e.target.value;render()});
   document.getElementById('sortSel').addEventListener('change', e=>{state.sort=e.target.value;render()});
   document.getElementById('regionSel').addEventListener('change', e=>{state.region=e.target.value;render();renderLab();renderMatrix();renderTrend(filtered());});
+  // 时间轴筛选
+  document.getElementById('tlCtrl')?.addEventListener('click', e=>{
+    const b=e.target.closest('button[data-vt]'); if(b){
+      vtBrand=b.dataset.vt;
+      b.closest('#tlCtrl').querySelectorAll('button[data-vt]').forEach(x=>x.classList.toggle('on', x===b));
+      renderTimeline();
+    }
+    const s=e.target.closest('button[data-vtseg]'); if(s){
+      vtSeg=s.dataset.vtseg;
+      s.closest('#tlCtrl').querySelectorAll('button[data-vtseg]').forEach(x=>x.classList.toggle('on', x===s));
+      renderTimeline();
+    }
+  });
   // 趋势时间范围
   document.getElementById('trendRange')?.addEventListener('click', e=>{
     const b=e.target.closest('button[data-r]'); if(!b) return;
@@ -559,6 +630,7 @@ function bindEvents(){
     });
     // resize charts after tab switch
     setTimeout(()=>Object.values(charts).forEach(c=>c&&c.resize()), 80);
+    if(tab==='timeline') setTimeout(()=>renderTimeline(), 60);
   });
   window.addEventListener('keydown', e=>{
     if(e.key==='/' && document.activeElement.tagName!=='INPUT'){e.preventDefault();document.getElementById('q').focus()}
@@ -1124,8 +1196,14 @@ function renderServers(){
 }
 
 // ---------- timeline & matrix ----------
+let vtBrand='all', vtSeg='all';
 function renderTimeline(){
+  // hash support: #timeline
   const tl=document.getElementById('timeline');
+  const vt=document.getElementById('vtimeline');
+  const badge=document.getElementById('tlBadge');
+  if(!tl||!vt) return;
+  // keep old horizontal timeline hidden but still fill for fallback
   const years=[2020,2021,2022,2023,2024,2025,2026];
   const minT=new Date('2020-01-01').getTime(), maxT=new Date('2026-06-01').getTime();
   const brandCol={NVIDIA:'#76b900',AMD:'#ed1c24',Intel:'#0071c5'};
@@ -1139,8 +1217,37 @@ function renderTimeline(){
       }).join('')}
     </div><div style="width:180px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${gl.map(g=>g.name).join(' · ')||'—'}</div></div>`;
   }).join('') + `<div style="font-size:10px;color:var(--dim);margin-top:8px">● NVIDIA &nbsp; ● AMD &nbsp; ● Intel · 悬停查看具体型号与发布日</div>`;
+
+  // vertical timeline — main view, filterable
+  let list=[...gpus].sort((a,b)=> new Date(a.release)-new Date(b.release));
+  if(vtBrand!=='all') list=list.filter(g=>g.brand===vtBrand);
+  if(vtSeg!=='all') list=list.filter(g=>g.segment===vtSeg);
+  if(badge) badge.textContent=`${list.length} 款 · ${list[0]?list[0].release:''} → ${list[list.length-1]?list[list.length-1].release:''}`;
+  // group by year
+  const byYear=new Map();
+  list.forEach(g=>{ const y=new Date(g.release).getFullYear(); if(!byYear.has(y)) byYear.set(y,[]); byYear.get(y).push(g); });
+  const yearsSorted=[...byYear.keys()].sort((a,b)=>a-b);
+  vt.innerHTML=yearsSorted.map(y=>{
+    const cards=byYear.get(y).map(g=>`
+      <div class="vt-card vt-${g.brand.toLowerCase()}" data-id="${g.id}" onclick="openModal('${g.id}')">
+        <div style="min-width:0;flex:1">
+          <h4>${g.brand} ${g.name} <small>${g.arch} · ${g.vram_gb}GB ${g.vram_type} · ${g.bandwidth_gbps}GB/s</small></h4>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${g.process} · ${g.pcie} · TDP ${g.tdp_w}W · <span class="pill ${g.segment==='consumer'?'pill-consumer':g.segment==='datacenter'?'pill-datacenter':'pill-workstation'}" style="font-size:9px;vertical-align:middle">${g.segment}</span></div>
+        </div>
+        <div class="vt-meta">
+          <strong>${g.release}</strong><br/>
+          <span>$${g.msrp_usd.toLocaleString()}</span>
+          <span style="color:var(--dim)"> · ${g.perf_ai_llm? 'AI '+g.perf_ai_llm:''}</span>
+        </div>
+      </div>`).join('');
+    return `<div class="vt-year">▸ ${y} · ${byYear.get(y).length} 款</div>${cards}`;
+  }).join('') || `<div style="padding:18px;color:var(--muted);text-align:center;border:1px dashed var(--border);border-radius:12px">无匹配结果，切换筛选条件试试</div>`;
+
+  // expose for agent: set document title anchor
+  vt.dataset.count=list.length;
 }
-function renderMatrix(){
+
+function renderMatrix(){{
   const regions=['US','EU','CN','JP'];
   const header=`<thead><tr><th>型号</th><th>MSRP</th>${regions.map(r=>`<th>${r} 价格</th><th>${r} 供货</th>`).join('')}<th>发布</th></tr></thead>`;
   const rows=gpus.map(g=>{
